@@ -21,7 +21,7 @@ alivePair       = ["ALIVE",         "$(SUPPORT)/alive"]
 autosavePair    = ["AUTOSAVE",      "$(SUPPORT)/autosave"]
 calcPair        = ["CALC",          "$(SUPPORT)/calc"]
 adCorePair      = ["ADCORE",        "$(AREA_DETECTOR)/ADCore"]
-iocStatsPair    = ["DEVIOCSTATS",   "$(SUPPORT)"]
+iocStatsPair    = ["DEVIOCSTATS",   "$(SUPPORT)/iocStats"]
 pvaPair         = ["PVA",           "path to pva"]
 
 # List containing macros and values to replace. List looks as follows: [ ["EPICS_BASE", pathToBase], ["SUPPORT", pathToSupport], ...]
@@ -33,12 +33,21 @@ macroValList = [epicsBasePair, supportPair, adPair, busyPair, asynPair, seqPair,
 isLinux = True
 EPICS_ARCH = "linux-x86_64"
 
-
+# Function that iterates over the configuration files that pertain to the current arch,
+# identifies lines that contain the macros in the list, and replaces them. If not in the list 
+# the line is copied as-is. upon completion, the old file is moved into a new "EXAMPLE_FILES"
+# directory if it is needed again.
+#
+# @params: oldPath -> path to the example configuration file
+# @return: void
+#
 def copy_macro_replace(oldPath):
     oldFile = open(oldPath, "r+")
+    # Every example file starts with EXAMPLE_FILENAME, so we disregard the first 8 characters 'EXAMPLE_' for the new name
     newPath = oldPath[8:]
     newFile = open(newPath, "w+")
 
+    # Iterate over the lines in the old file, replacing macros as you go
     line = oldFile.readline()
     while line:
         wasMacro = False
@@ -50,11 +59,18 @@ def copy_macro_replace(oldPath):
             newFile.write(line)
         line = oldFile.readline()
     oldFile.close()
+    # Place the old file in a directory for future use.
     shutil.move(oldPath, "EXAMPLE_FILES/{}".format(oldPath))
     newFile.close()
 
 
 # Removes unnecessary example files i.e. vxworks, windows etc.
+# This cleans up the configuration directory, and only leaves necessary files.
+#
+# If building for multilple architectures, remove this requirement.
+#
+# @return: void
+#
 def remove_examples():
     for file in os.listdir():
         if os.path.isfile(file):
@@ -66,7 +82,11 @@ def remove_examples():
                         os.remove(file)
 
 
-
+# Basic function that iterates over all of the files and directories in the "configure" directory
+# of area detector. If it detects "EXAMPLE" files, it passes them on to the macro replacing function
+#
+# @return: void
+#
 def process_examples():
     for file in os.listdir():
         if os.path.isfile(file):
@@ -74,6 +94,7 @@ def process_examples():
                 copy_macro_replace(file)
 
 
+# Top Level function of the configuration generator
 def generate_config_files():
     # first make a directory to house all of the example files so they don't clutter up the workspace
     if not os.path.exists("EXAMPLE_FILES"):
