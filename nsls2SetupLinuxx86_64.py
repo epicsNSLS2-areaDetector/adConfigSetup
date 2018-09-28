@@ -7,7 +7,13 @@
 import os
 import shutil
 
+# Global variables. isLinux is necessary because of the .Linux file being univeral across Linux arches
+isLinux = True
+replaceOptionalPackages = False
+EPICS_ARCH = "linux-x86_64"
 
+# MACROS FOR REQUIRED PACKAGES
+#####################################################################################################################################################
 # Macro/Value pairs. To add new macros and values, add them here, and add the name to the list. Follow the same format as below
 epicsBasePair   = ["EPICS_BASE",    "/epics/base-7.0.1.1"]
 supportPair     = ["SUPPORT",       "/epics/synAppsRelease/synApps/support"]
@@ -28,10 +34,13 @@ pvaPair         = ["PVA",           "path to pva"]
 macroValList = [epicsBasePair, supportPair, adPair, busyPair, asynPair, seqPair, 
                 sscanPair, alivePair, autosavePair, calcPair, adCorePair,  
                 iocStatsPair, pvaPair]
+#######################################################################################################################################################
 
-# Global variables:
-isLinux = True
-EPICS_ARCH = "linux-x86_64"
+# MACROS FOR OPTIONAL PACKAGES (All of these values are set to defaults here to start)
+#######################################################################################################################################################
+
+#######################################################################################################################################################
+
 
 # Function that iterates over the configuration files that pertain to the current arch,
 # identifies lines that contain the macros in the list, and replaces them. If not in the list 
