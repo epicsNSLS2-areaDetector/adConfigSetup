@@ -8,25 +8,45 @@ import os
 import shutil
 
 
+# Macro/Value pairs. To add new macros and values, add them here, and add the name to the list. Follow the same format as below
+epicsBasePair   = ["EPICS_BASE",    "/epics/base-7.0.1.1"]
+supportPair     = ["SUPPORT",       "/epics/synAppsRelease/synApps/support"]
+adPair          = ["AREA_DETECTOR", "$(SUPPORT)/areaDetector-3-3-2"]
+adSupportPair   = ["ADSupport",     "$(AREA_DETECTOR)/ADSupport"]
+busyPair        = ["BUSY",          "$(SUPPORT)/busy"]
+asynPair        = ["ASYN",          "$(SUPPORT)/asyn"]
+seqPair         = ["SNCSEQ",        "$(SUPPORT)/seq-2-2-5"]
+sscanPair       = ["SSCAN",         "$(SUPPORT)/sscan"]
+alivePair       = ["ALIVE",         "$(SUPPORT)/alive"]
+autosavePair    = ["AUTOSAVE",      "$(SUPPORT)/autosave"]
+calcPair        = ["CALC",          "$(SUPPORT)/calc"]
+adCorePair      = ["ADCORE",        "$(AREA_DETECTOR)/ADCore"]
+iocStatsPair    = ["DEVIOCSTATS",   "$(SUPPORT)"]
+pvaPair         = ["PVA",           "path to pva"]
+
+# List containing macros and values to replace. List looks as follows: [ ["EPICS_BASE", pathToBase], ["SUPPORT", pathToSupport], ...]
+macroValList = [epicsBasePair, supportPair, adPair, busyPair, asynPair, seqPair, 
+                sscanPair, alivePair, autosavePair, calcPair, adCorePair,  
+                iocStatsPair, pvaPair]
+
 # Global variables:
+isLinux = True
+EPICS_ARCH = "linux-x86_64"
 
-pathBase = "/epics/"
-pathAD = "$(SUPPORT)/areaDetector-3-3-2"
-pathAsyn = "$(SUPPORT)/asyn"
-pathADSupport = "$(AREA_DETECTOR)/ADSupport"
-pathADCore = "$(AREA_DETECTOR)/ADCore"
-pathBusy = "$(SUPPORT)/busy"
-path
 
-def copy_macro_replace(oldPath, newPath, macro, value):
+def copy_macro_replace(oldPath):
     oldFile = open(oldPath, "r+")
+    newPath = oldPath[8:]
     newFile = open(newPath, "w+")
 
     line = oldFile.readline()
     while line:
-        if line.startswith(macro):
-            newFile.write("{}={}\n".format(macro,value))
-        else:
+        wasMacro = False
+        for pair in macroValList:
+            if line.startswith(pair[0]):
+                newFile.write("{}={}\n".format(pair[0],pair[1]))
+                wasMacro = True
+        if wasMacro == False:
             newFile.write(line)
         line = oldFile.readline()
     oldFile.close()
@@ -34,37 +54,24 @@ def copy_macro_replace(oldPath, newPath, macro, value):
     newFile.close()
 
 
-def copy_example_file(oldPath, newPath):
-    shutil.copyfile(oldPath,      newPath)
-    shutil.move(oldPath,          "EXAMPLE_FILES/{}".format(oldPath))
-
-# Copies the generic example files that do not contain absolute paths.
-# These do not require specific setup for copying.
-def copy_generic_files():
-
-    print("Copying CONFIG_SITE.local.Linux. The default config is to build everything in ADSupport. Edit this file to use external library packages")
-    copy_example_file("EXAMPLE_CONFIG_SITE.local.Linux", "CONFIG_SITE.local.Linux")
-
-    print("Copying CONFIG_SITE.local. This file conatins a list of libraries that AD drivers can be built with. Edit this file to enable/disable libraries.")
-    copy_example_file("EXAMPLE_CONFIG_SITE.local", "CONFIG_SITE.local")
-
-    print("Copying CONFIG_SITE.local.linux-x86_64. This file is a linux specific extention of the standard CONFIG_SITE.local. Edit this file to enable disable linux specific libs.")
-    copy_example_file("EXAMPLE_CONFIG_SITE.local.linux-x86_64", "CONFIG_SITE.local.linux-x86_64")
-
-    print("Copying the RELEASE.local file. In this file, uncomment the detectors you wish to build on all architectures.")
-    copy_example_file("EXAMPLE_RELEASE.local", "RELEASE.local")
-
-    print("Copying RELEASE.local.linux-x86_64. Add a line for each driver that should be built just for linux-x86_64")
-    copy_example_file("EXAMPLE_RELEASE.local.linux-x86_64", "RELEASE.local.linux-x86_64")
-
-
-
-# Removes remaining example files i.e. vxworks, windows etc.
+# Removes unnecessary example files i.e. vxworks, windows etc.
 def remove_examples():
     for file in os.listdir():
         if os.path.isfile(file):
+            if file.startswith("EXAMPLE") and not file.endswith(".local") and not file.endswith(EPICS_ARCH):
+                if not file.endswith(".Linux"):
+                    os.remove(file)
+                else:
+                    if not isLinux:
+                        os.remove(file)
+
+
+
+def process_examples():
+    for file in os.listdir():
+        if os.path.isfile(file):
             if file.startswith("EXAMPLE"):
-                os.remove(file)
+                copy_macro_replace(file)
 
 
 def generate_config_files():
@@ -72,12 +79,8 @@ def generate_config_files():
     if not os.path.exists("EXAMPLE_FILES"):
         os.makedirs("EXAMPLE_FILES")
 
-    copy_generic_files()
-
-    print("Copying RELEASE_SUPPORT.local. This contains the path to your Support directory and should be detected automatically")
-    copy_macro_replace("EXAMPLE_RELEASE_SUPPORT.local", "RELEASE_SUPPORT.local", "SUPPORT", "/epics/synAppsRelease/synApps/support")
-    print("Copying RELEASE_LIBS.local. Tis contains the paths to the core libs used by AD. Should be automatically detected")
-    copy_macro_replace("EXAMPLE_RELEASE_LIBS.local", "EX2_RELEASE_LIBS.local", "EPICS_BASE", "/epics/base-7.0.1.1")
+    remove_examples()
+    process_examples()
     
 
 generate_config_files()
