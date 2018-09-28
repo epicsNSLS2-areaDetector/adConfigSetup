@@ -34,29 +34,28 @@ def copy_macro_replace(oldPath, newPath, macro, value):
     newFile.close()
 
 
+def copy_example_file(oldPath, newPath):
+    shutil.copyfile(oldPath,      newPath)
+    shutil.move(oldPath,          "EXAMPLE_FILES/{}".format(oldPath))
+
 # Copies the generic example files that do not contain absolute paths.
 # These do not require specific setup for copying.
 def copy_generic_files():
 
     print("Copying CONFIG_SITE.local.Linux. The default config is to build everything in ADSupport. Edit this file to use external library packages")
-    shutil.copyfile("EXAMPLE_CONFIG_SITE.local.Linux",      "CONFIG_SITE.local.Linux")
-    shutil.move("EXAMPLE_CONFIG_SITE.local.Linux",          "EXAMPLE_FILES/EXAMPLE_CONFIG_SITE.local.Linux")
+    copy_example_file("EXAMPLE_CONFIG_SITE.local.Linux", "CONFIG_SITE.local.Linux")
 
     print("Copying CONFIG_SITE.local. This file conatins a list of libraries that AD drivers can be built with. Edit this file to enable/disable libraries.")
-    shutil.copyfile("EXAMPLE_CONFIG_SITE.local",      "CONFIG_SITE.local")
-    shutil.move("EXAMPLE_CONFIG_SITE.local",          "EXAMPLE_FILES/EXAMPLE_CONFIG_SITE.local")
+    copy_example_file("EXAMPLE_CONFIG_SITE.local", "CONFIG_SITE.local")
 
     print("Copying CONFIG_SITE.local.linux-x86_64. This file is a linux specific extention of the standard CONFIG_SITE.local. Edit this file to enable disable linux specific libs.")
-    shutil.copyfile("EXAMPLE_CONFIG_SITE.local.linux-x86_64",      "CONFIG_SITE.local.linux-x86_64")
-    shutil.move("EXAMPLE_CONFIG_SITE.local.linux-x86_64",          "EXAMPLE_FILES/EXAMPLE_CONFIG_SITE.local.linux-x86_64")
+    copy_example_file("EXAMPLE_CONFIG_SITE.local.linux-x86_64", "CONFIG_SITE.local.linux-x86_64")
 
     print("Copying the RELEASE.local file. In this file, uncomment the detectors you wish to build on all architectures.")
-    shutil.copyfile("EXAMPLE_RELEASE.local",      "RELEASE.local")
-    shutil.move("EXAMPLE_RELEASE.local",          "EXAMPLE_FILES/EXAMPLE_RELEASE.local")
+    copy_example_file("EXAMPLE_RELEASE.local", "RELEASE.local")
 
     print("Copying RELEASE.local.linux-x86_64. Add a line for each driver that should be built just for linux-x86_64")
-    shutil.copyfile("EXAMPLE_RELEASE.local.linux-x86_64",      "RELEASE.local.linux-x86_64")
-    shutil.move("EXAMPLE_RELEASE.local.linux-x86_64",          "EXAMPLE_FILES/EXAMPLE_RELEASE.local.linux-x86_64")
+    copy_example_file("EXAMPLE_RELEASE.local.linux-x86_64", "RELEASE.local.linux-x86_64")
 
 
 
