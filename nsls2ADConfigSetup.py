@@ -6,10 +6,10 @@
 
 import os
 import shutil
+import argparse
 
 # Global variables. isLinux is necessary because of the .Linux file being univeral across Linux arches
 isLinux = True
-replaceOptionalPackages = False
 EPICS_ARCH = "linux-x86_64"
 
 # MACROS FOR REQUIRED PACKAGES
@@ -96,7 +96,7 @@ extZlibPair         = ["ZLIB_EXTERNAL",                     "NO"]
 
 
 # List containing all optional macro/value pairs
-optionalValList = [boostPair, incPVAPair, qsrvPair, incBloscPair, extBloscPair, incGFXMagPair, extGFXMagPair, prefixGFXMagPair, incHDF5Pair, extHDF5Pair
+optionalValList = [boostPair, incPVAPair, qsrvPair, incBloscPair, extBloscPair, incGFXMagPair, extGFXMagPair, prefixGFXMagPair, incHDF5Pair, extHDF5Pair,
                     incJPGPair, extJPGPair, incNCDFPair, extNCDFPair, incNEXPair, extNEXPair, incOpenCVPair, extOpenCVPair, incSzipPair, extSzipPair,
                     incTIFPair, extTIFPair, extXML2Pair, incZlibPair, extZlibPair]
 #######################################################################################################################################################
@@ -110,7 +110,7 @@ optionalValList = [boostPair, incPVAPair, qsrvPair, incBloscPair, extBloscPair, 
 # @params: oldPath -> path to the example configuration file
 # @return: void
 #
-def copy_macro_replace(oldPath):
+def copy_macro_replace(oldPath, recPairs, optPairs, replaceOpt):
     oldFile = open(oldPath, "r+")
     # Every example file starts with EXAMPLE_FILENAME, so we disregard the first 8 characters 'EXAMPLE_' for the new name
     newPath = oldPath[8:]
@@ -120,12 +120,12 @@ def copy_macro_replace(oldPath):
     line = oldFile.readline()
     while line:
         wasMacro = False
-        for pair in macroValList:
+        for pair in recPairs:
             if line.startswith(pair[0]):
                 newFile.write("{}={}\n".format(pair[0],pair[1]))
                 wasMacro = True
-        if wasMacro == False and replaceOptionalPackages == True:
-            for pair in optionalValList:
+        if wasMacro == False and replaceOpt == True:
+            for pair in optPairs:
                 if line.startswith(pair[0]):
                     newFile.write("{}={}\n".format(pair[0],pair[1]))
                     wasMacro = True
@@ -161,21 +161,41 @@ def remove_examples():
 #
 # @return: void
 #
-def process_examples():
+def process_examples(recPairs, optPairs, replaceOpt):
     for file in os.listdir():
         if os.path.isfile(file):
             if file.startswith("EXAMPLE"):
-                copy_macro_replace(file)
+                copy_macro_replace(file, recPairs, optPairs, replaceOpt)
 
 
 # Top Level function of the configuration generator
-def generate_config_files():
+def generate_config_files(use_external, path_to_extern, remove_other_arch, replace_opt_macros):
     # first make a directory to house all of the example files so they don't clutter up the workspace
     if not os.path.exists("EXAMPLE_FILES"):
         os.makedirs("EXAMPLE_FILES")
 
-    remove_examples()
-    process_examples()
+    if remove_other_arch == True:
+        remove_examples()
     
+    if use_external == True:
+        recPairs, optPairs = generate_pairs_extern(path_to_extern)
+        process_examples(recPairs, optPairs)
+    
+    else:
+        process_examples(macroValList, optionalValList)
 
-generate_config_files()
+def parse_user_input():
+    parser = argparse.ArgumentParser(description = 'Setup area detector configuration files')
+    parser.add_argument('-o', '--opt', action = 'store_true', help = 'Substitute optional package macros')
+    parser.add_argument('-r', '--rem', action = 'store_true', help = 'Remove example files for other arches')
+    parser.add_argument('-e', '--ext', help = 'Use an eternal macro list')
+    arguments = vars(parser.parse_args())
+    if arguments["ext"] is not None:
+        generate_config_files(True, arguments["ext"], arguments["rem"], arguments["opt"])
+    else:
+        generate_config_files(False, None, arguments["rem"], arguments["opt"])
+
+
+    
+parse_user_input()
+# generate_config_files()
