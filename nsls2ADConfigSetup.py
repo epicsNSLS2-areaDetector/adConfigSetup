@@ -4,13 +4,19 @@
 # Copyright (c): Brookhaven National Laboratory
 # Created: September 28, 2018
 
+
+
 import os
 import shutil
 import argparse
 
+
+
 # Global variables. isLinux is necessary because of the .Linux file being univeral across Linux arches
 isLinux = True
 EPICS_ARCH = "linux-x86_64"
+
+
 
 # MACROS FOR REQUIRED PACKAGES
 #####################################################################################################################################################
@@ -36,6 +42,8 @@ macroValList = [epicsBasePair, supportPair, adPair, busyPair, asynPair, seqPair,
                 sscanPair, alivePair, autosavePair, calcPair, adCorePair,  
                 iocStatsPair, pvaPair]
 #######################################################################################################################################################
+
+
 
 # MACROS FOR OPTIONAL PACKAGES (All of these values are set to defaults here to start)
 #######################################################################################################################################################
@@ -102,12 +110,16 @@ optionalValList = [boostPair, incPVAPair, qsrvPair, incBloscPair, extBloscPair, 
 #######################################################################################################################################################
 
 
+
 # Function that iterates over the configuration files that pertain to the current arch,
 # identifies lines that contain the macros in the list, and replaces them. If not in the list 
 # the line is copied as-is. upon completion, the old file is moved into a new "EXAMPLE_FILES"
 # directory if it is needed again.
 #
 # @params: oldPath -> path to the example configuration file
+# @params: recPairs -> pairs of required Macros to edit
+# @params: optPairs -> pairs of optional macros to edit
+# @params: replaceOpt -> flag to see if opt macros are to be replaced
 # @return: void
 #
 def copy_macro_replace(oldPath, recPairs, optPairs, replaceOpt):
@@ -138,10 +150,11 @@ def copy_macro_replace(oldPath, recPairs, optPairs, replaceOpt):
     newFile.close()
 
 
+
 # Removes unnecessary example files i.e. vxworks, windows etc.
 # This cleans up the configuration directory, and only leaves necessary files.
 #
-# If building for multilple architectures, remove this requirement.
+# If building for multilple architectures, do not use the -r flag enabling this.
 #
 # @return: void
 #
@@ -156,9 +169,13 @@ def remove_examples():
                         os.remove(file)
 
 
+
 # Basic function that iterates over all of the files and directories in the "configure" directory
 # of area detector. If it detects "EXAMPLE" files, it passes them on to the macro replacing function
 #
+# @params: recPairs -> recquired macro/value pairs
+# @params: optPairs -> optional macro/value pairs
+# @params: replaceOpt -> flag to see if optional macro/value pairs should be replaced
 # @return: void
 #
 def process_examples(recPairs, optPairs, replaceOpt):
@@ -166,6 +183,7 @@ def process_examples(recPairs, optPairs, replaceOpt):
         if os.path.isfile(file):
             if file.startswith("EXAMPLE"):
                 copy_macro_replace(file, recPairs, optPairs, replaceOpt)
+
 
 
 # Top Level function of the configuration generator
@@ -184,6 +202,22 @@ def generate_config_files(use_external, path_to_extern, remove_other_arch, repla
     else:
         process_examples(macroValList, optionalValList)
 
+
+
+# Function responsible for parsing the user's command line arguments.
+# 
+# usage: nsls2ADConfigSetup.py [-h] [-o] [-r] [-e EXT]
+#
+# Setup area detector configuration files
+#
+# optional arguments:
+#  -h, --help         show this help message and exit
+#  -o, --opt          Substitute optional package macros
+#  -r, --rem          Remove example files for other arches
+#  -e EXT, --ext EXT  Use an eternal macro list
+#
+# After parsing calls the top level generate_config_files function
+#
 def parse_user_input():
     parser = argparse.ArgumentParser(description = 'Setup area detector configuration files')
     parser.add_argument('-o', '--opt', action = 'store_true', help = 'Substitute optional package macros')
