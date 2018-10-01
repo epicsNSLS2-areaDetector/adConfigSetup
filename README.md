@@ -20,3 +20,4 @@ python3 nsls2SetupLinuxx86_64.py
 * The ability to import a single macro - value pair file
 * Support for other architectures
 * Ability to comment/uncomment macros
+* Some command line arguments to simplify script operation.

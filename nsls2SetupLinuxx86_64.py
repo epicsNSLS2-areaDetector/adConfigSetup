@@ -16,20 +16,20 @@ EPICS_ARCH = "linux-x86_64"
 #####################################################################################################################################################
 # Macro/Value pairs. To add new macros and values, add them here, and add the name to the list. Follow the same format as below
 # Check the paths in each pair against your file system and change as necessary
-epicsBasePair   = ["EPICS_BASE",    "/epics/base-7.0.1.1"]
-supportPair     = ["SUPPORT",       "/epics/synAppsRelease/synApps/support"]
-adPair          = ["AREA_DETECTOR", "$(SUPPORT)/areaDetector-3-3-2"]
-adSupportPair   = ["ADSupport",     "$(AREA_DETECTOR)/ADSupport"]
-busyPair        = ["BUSY",          "$(SUPPORT)/busy"]
-asynPair        = ["ASYN",          "$(SUPPORT)/asyn"]
-seqPair         = ["SNCSEQ",        "$(SUPPORT)/seq-2-2-5"]
-sscanPair       = ["SSCAN",         "$(SUPPORT)/sscan"]
-alivePair       = ["ALIVE",         "$(SUPPORT)/alive"]
-autosavePair    = ["AUTOSAVE",      "$(SUPPORT)/autosave"]
-calcPair        = ["CALC",          "$(SUPPORT)/calc"]
-adCorePair      = ["ADCORE",        "$(AREA_DETECTOR)/ADCore"]
-iocStatsPair    = ["DEVIOCSTATS",   "$(SUPPORT)/iocStats"]
-pvaPair         = ["PVA",           "path to pva"]
+epicsBasePair       = ["EPICS_BASE",                        "/epics/base-7.0.1.1"]
+supportPair         = ["SUPPORT",                           "/epics/synAppsRelease/synApps/support"]
+adPair              = ["AREA_DETECTOR",                     "$(SUPPORT)/areaDetector-3-3-2"]
+adSupportPair       = ["ADSupport",                         "$(AREA_DETECTOR)/ADSupport"]
+busyPair            = ["BUSY",                              "$(SUPPORT)/busy"]
+asynPair            = ["ASYN",                              "$(SUPPORT)/asyn"]
+seqPair             = ["SNCSEQ",                            "$(SUPPORT)/seq-2-2-5"]
+sscanPair           = ["SSCAN",                             "$(SUPPORT)/sscan"]
+alivePair           = ["ALIVE",                             "$(SUPPORT)/alive"]
+autosavePair        = ["AUTOSAVE",                          "$(SUPPORT)/autosave"]
+calcPair            = ["CALC",                              "$(SUPPORT)/calc"]
+adCorePair          = ["ADCORE",                            "$(AREA_DETECTOR)/ADCore"]
+iocStatsPair        = ["DEVIOCSTATS",                       "$(SUPPORT)/iocStats"]
+pvaPair             = ["PVA",                               "path to pva"]
 
 # List containing macros and values to replace. List looks as follows: [ ["EPICS_BASE", pathToBase], ["SUPPORT", pathToSupport], ...]
 macroValList = [epicsBasePair, supportPair, adPair, busyPair, asynPair, seqPair, 
@@ -40,41 +40,65 @@ macroValList = [epicsBasePair, supportPair, adPair, busyPair, asynPair, seqPair,
 # MACROS FOR OPTIONAL PACKAGES (All of these values are set to defaults here to start)
 #######################################################################################################################################################
 # These macro/value pairs follow the same format as the required ones. To enable replacement set the replaceOptionalPackages toggle to 'True'
-boostPair       = ["WITH_BOOST","NO"] # Boost is used for AD unit tests
-incPVAPair = ["WITH_PVA","YES"] # pva must be enabled for NDPluginPva, pvaDriver, and qsrv
-qsrvPair = ["WITH_QSRV", "YES"] #controls whether IOCs are built with QSRV
+#
+# NOTE: If the external tag is set to 'YES' and the with tag is set to 'YES', you must enter the generated CONFIG_SITE.local file and add paths to
+#       the include and library paths of the external packages.
 
-incBloscPair = ["WITH_BLOSC", "YES"]
-extBloscPair = ["BLOSC_EXTERNAL","NO"]
+boostPair           = ["WITH_BOOST",                        "NO"]           # Boost is used for AD unit tests
 
-incGFXMagPair = ["WITH_GRAPHICSMAGIK","YES"]
-extGFXMagPair = ["GRAPHICSMAGICK_EXTERNAL", "NO"]
-prefixGFXMagPair = ["GRAPHICSMAGICK_PREFIX_SYMBOLS", "YES"]
+incPVAPair          = ["WITH_PVA",                          "YES"]          # pva must be enabled for NDPluginPva, pvaDriver, and qsrv
 
-incHDF5Pair = ["WITH_HDF5", "YES"]
-extHDF5Pair = ["HDF5_EXTERNAL", "NO"]
+qsrvPair            = ["WITH_QSRV",                         "YES"]          #controls whether IOCs are built with QSRV
 
-incJPGPair = ["WITH_JPEG", "YES"]
-extJPGPair = ["JPEG_EXTERNAL", "NO"]
+# Blosc is required for specific compressors in the HDF5 plugin
+incBloscPair        = ["WITH_BLOSC",                        "YES"]
+extBloscPair        = ["BLOSC_EXTERNAL",                    "NO"]
 
-incNCDFPair = ["WITH_NETCDF", "YES"]
-extNCDFPair = ["NETCDF_EXTERNAL", "NO"]
+# GraphicsMagick is used by NDFileMagick and ADURL
+incGFXMagPair       = ["WITH_GRAPHICSMAGIK",                "YES"]
+extGFXMagPair       = ["GRAPHICSMAGICK_EXTERNAL",           "NO"]
+prefixGFXMagPair    = ["GRAPHICSMAGICK_PREFIX_SYMBOLS",     "YES"]
 
-incNEXPair = ["WITH_NEXUS", "YES"]
-extNEXPair = ["NEXUS_EXTERNAL", "NO"]
+# HDF5 is required for HDF5 file processing as well as Nexus
+incHDF5Pair         = ["WITH_HDF5",                         "YES"]
+extHDF5Pair         = ["HDF5_EXTERNAL",                     "NO"]
 
-incOpenCVPair = ["WITH_OPENCV", "NO"]
-extOpenCVPair = ["OPENCV_EXTERNAL", "YES"]
+# JPEG is required for jpg file processing
+incJPGPair          = ["WITH_JPEG",                         "YES"]
+extJPGPair          = ["JPEG_EXTERNAL",                     "NO"]
 
-incSzipPair = ["WITH_SZIP", "YES"]
-extSzipPair = ["SZIP_EXTERNAL", "NO"]
+# NetCDF processing
+incNCDFPair         = ["WITH_NETCDF",                       "YES"]
+extNCDFPair         = ["NETCDF_EXTERNAL",                   "NO"]
 
-incTIFPair = ["WITH_TIFF", "YES"]
-extTIFPair = ["TIFF_EXTERNAL", "NO"]
+# Nexus file processing
+incNEXPair          = ["WITH_NEXUS",                        "YES"]
+extNEXPair          = ["NEXUS_EXTERNAL",                    "NO"]
+
+# Computer Vision ADCompVision ADPluginBar
+incOpenCVPair       = ["WITH_OPENCV",                       "NO"]
+extOpenCVPair       = ["OPENCV_EXTERNAL",                   "YES"]
+
+# Required for HDF5 and Nexus.
+incSzipPair         = ["WITH_SZIP",                         "YES"]
+extSzipPair         = ["SZIP_EXTERNAL",                     "NO"]
+
+# Tiff processing
+incTIFPair          = ["WITH_TIFF",                         "YES"]
+extTIFPair          = ["TIFF_EXTERNAL",                     "NO"]
+
+# Required by ADCore, but can use external build.
+extXML2Pair         = ["XML2_EXTERNAL",                     "NO"]
+
+# Required for HDF5 and Nexus
+incZlibPair         = ["WITH_ZLIB",                         "YES"]
+extZlibPair         = ["ZLIB_EXTERNAL",                     "NO"]
 
 
 # List containing all optional macro/value pairs
-optionalValList = []
+optionalValList = [boostPair, incPVAPair, qsrvPair, incBloscPair, extBloscPair, incGFXMagPair, extGFXMagPair, prefixGFXMagPair, incHDF5Pair, extHDF5Pair
+                    incJPGPair, extJPGPair, incNCDFPair, extNCDFPair, incNEXPair, extNEXPair, incOpenCVPair, extOpenCVPair, incSzipPair, extSzipPair,
+                    incTIFPair, extTIFPair, extXML2Pair, incZlibPair, extZlibPair]
 #######################################################################################################################################################
 
 
