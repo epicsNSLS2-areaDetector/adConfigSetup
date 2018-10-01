@@ -15,6 +15,7 @@ EPICS_ARCH = "linux-x86_64"
 # MACROS FOR REQUIRED PACKAGES
 #####################################################################################################################################################
 # Macro/Value pairs. To add new macros and values, add them here, and add the name to the list. Follow the same format as below
+# Check the paths in each pair against your file system and change as necessary
 epicsBasePair   = ["EPICS_BASE",    "/epics/base-7.0.1.1"]
 supportPair     = ["SUPPORT",       "/epics/synAppsRelease/synApps/support"]
 adPair          = ["AREA_DETECTOR", "$(SUPPORT)/areaDetector-3-3-2"]
@@ -38,7 +39,42 @@ macroValList = [epicsBasePair, supportPair, adPair, busyPair, asynPair, seqPair,
 
 # MACROS FOR OPTIONAL PACKAGES (All of these values are set to defaults here to start)
 #######################################################################################################################################################
+# These macro/value pairs follow the same format as the required ones. To enable replacement set the replaceOptionalPackages toggle to 'True'
+boostPair       = ["WITH_BOOST","NO"] # Boost is used for AD unit tests
+incPVAPair = ["WITH_PVA","YES"] # pva must be enabled for NDPluginPva, pvaDriver, and qsrv
+qsrvPair = ["WITH_QSRV", "YES"] #controls whether IOCs are built with QSRV
 
+incBloscPair = ["WITH_BLOSC", "YES"]
+extBloscPair = ["BLOSC_EXTERNAL","NO"]
+
+incGFXMagPair = ["WITH_GRAPHICSMAGIK","YES"]
+extGFXMagPair = ["GRAPHICSMAGICK_EXTERNAL", "NO"]
+prefixGFXMagPair = ["GRAPHICSMAGICK_PREFIX_SYMBOLS", "YES"]
+
+incHDF5Pair = ["WITH_HDF5", "YES"]
+extHDF5Pair = ["HDF5_EXTERNAL", "NO"]
+
+incJPGPair = ["WITH_JPEG", "YES"]
+extJPGPair = ["JPEG_EXTERNAL", "NO"]
+
+incNCDFPair = ["WITH_NETCDF", "YES"]
+extNCDFPair = ["NETCDF_EXTERNAL", "NO"]
+
+incNEXPair = ["WITH_NEXUS", "YES"]
+extNEXPair = ["NEXUS_EXTERNAL", "NO"]
+
+incOpenCVPair = ["WITH_OPENCV", "NO"]
+extOpenCVPair = ["OPENCV_EXTERNAL", "YES"]
+
+incSzipPair = ["WITH_SZIP", "YES"]
+extSzipPair = ["SZIP_EXTERNAL", "NO"]
+
+incTIFPair = ["WITH_TIFF", "YES"]
+extTIFPair = ["TIFF_EXTERNAL", "NO"]
+
+
+# List containing all optional macro/value pairs
+optionalValList = []
 #######################################################################################################################################################
 
 
