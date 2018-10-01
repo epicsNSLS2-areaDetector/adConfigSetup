@@ -124,6 +124,11 @@ def copy_macro_replace(oldPath):
             if line.startswith(pair[0]):
                 newFile.write("{}={}\n".format(pair[0],pair[1]))
                 wasMacro = True
+        if wasMacro == False and replaceOptionalPackages == True:
+            for pair in optionalValList:
+                if line.startswith(pair[0]):
+                    newFile.write("{}={}\n".format(pair[0],pair[1]))
+                    wasMacro = True
         if wasMacro == False:
             newFile.write(line)
         line = oldFile.readline()

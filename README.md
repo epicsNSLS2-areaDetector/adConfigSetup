@@ -12,7 +12,7 @@ To run the script, place it in the top level configuration directory of AREA DET
 and run
 
 ```
-python3 nsls2SetupLinuxx86_64.py
+python3 nsls2ADConfigSetup.py
 ```
 
 ### Some future additions may include:
