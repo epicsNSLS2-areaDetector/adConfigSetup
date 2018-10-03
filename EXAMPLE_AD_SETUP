@@ -5,7 +5,7 @@
 #       A default value will be substituted if that is the case.
 
 
-# REQUIRED MACRO SUBSTITUTIONS
+# REQUIRED MACRO SUBSTITUTIONS (If these are omitted, a default value will be used)
 
 EPICS_BASE=epics/base-7.0.1.1
 SUPPORT=/epics/synAppsRelease/synApps/support

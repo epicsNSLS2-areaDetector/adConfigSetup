@@ -122,7 +122,7 @@ optionalValList = [boostPair, incPVAPair, qsrvPair, incBloscPair, extBloscPair, 
 # @params: replaceOpt -> flag to see if opt macros are to be replaced
 # @return: void
 #
-def copy_macro_replace(oldPath, recPairs, optPairs, replaceOpt):
+def copy_macro_replace(oldPath, reqPairs, optPairs, replaceOpt):
     oldFile = open(oldPath, "r+")
     # Every example file starts with EXAMPLE_FILENAME, so we disregard the first 8 characters 'EXAMPLE_' for the new name
     newPath = oldPath[8:]
@@ -132,7 +132,7 @@ def copy_macro_replace(oldPath, recPairs, optPairs, replaceOpt):
     line = oldFile.readline()
     while line:
         wasMacro = False
-        for pair in recPairs:
+        for pair in reqPairs:
             if line.startswith(pair[0]):
                 newFile.write("{}={}\n".format(pair[0],pair[1]))
                 wasMacro = True
@@ -186,6 +186,42 @@ def process_examples(recPairs, optPairs, replaceOpt):
 
 
 
+# Simple function that checks if a macro is required for substitution
+#
+# @params: macro -> macro that is being substituted
+# @return: True if macro is required False otherwise
+def check_required(macro):
+    for pair in macroValList:
+        if macro == pair[0]:
+            return True
+    return False
+
+
+
+# Function that generates macro value pairs from an external file.
+# Takes path to file as input, reads line by line breaking apart macros and values
+# Checks 
+def generate_pairs_extern(path_to_extern):
+    reqPairs = []
+    optPairs = []
+    externFile = open(path_to_extern, "r+")
+
+    line = externFile.readline()
+
+    while line:
+        if line[0] != '#' and not line.strip():
+            macro, val = line.split('=')
+            pair = [macro, val]
+            req = check_required(macro)
+            if req:
+                reqPairs.append(req)
+            else:
+                optPairs.append(req)
+    externFile.close()
+    return reqPairs, optPairs
+
+
+
 # Top Level function of the configuration generator
 def generate_config_files(use_external, path_to_extern, remove_other_arch, replace_opt_macros):
     # first make a directory to house all of the example files so they don't clutter up the workspace
@@ -196,8 +232,8 @@ def generate_config_files(use_external, path_to_extern, remove_other_arch, repla
         remove_examples()
     
     if use_external == True:
-        recPairs, optPairs = generate_pairs_extern(path_to_extern)
-        process_examples(recPairs, optPairs)
+        reqPairs, optPairs = generate_pairs_extern(path_to_extern)
+        process_examples(reqPairs, optPairs)
     
     else:
         process_examples(macroValList, optionalValList)
