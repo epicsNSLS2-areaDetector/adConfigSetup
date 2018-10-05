@@ -207,7 +207,7 @@ def process_examples(recPairs, optPairs, replaceOpt):
 # @return: True if macro is required False otherwise
 def check_required(macro):
     for pair in macroValList:
-        if macro == pair[0]:first make a directory to house all of the example files so they don't clutter up the workspace
+        if macro == pair[0]:
             return True
     return False
 
