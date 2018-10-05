@@ -38,7 +38,7 @@ iocStatsPair        = ["DEVIOCSTATS",                       "$(SUPPORT)/iocStats
 pvaPair             = ["PVA",                               "path to pva"]
 
 # List containing macros and values to replace. List looks as follows: [ ["EPICS_BASE", pathToBase], ["SUPPORT", pathToSupport], ...]
-macroValList = [epicsBasePair, supportPair, adPair, busyPair, asynPair, seqPair, 
+macroValList = [epicsBasePair, supportPair, adPair, adSupportPair, busyPair, asynPair, seqPair, 
                 sscanPair, alivePair, autosavePair, calcPair, adCorePair,  
                 iocStatsPair, pvaPair]
 #######################################################################################################################################################
@@ -108,6 +108,13 @@ optionalValList = [boostPair, incPVAPair, qsrvPair, incBloscPair, extBloscPair, 
                     incJPGPair, extJPGPair, incNCDFPair, extNCDFPair, incNEXPair, extNEXPair, incOpenCVPair, extOpenCVPair, incSzipPair, extSzipPair,
                     incTIFPair, extTIFPair, extXML2Pair, incZlibPair, extZlibPair]
 #######################################################################################################################################################
+
+
+
+# Function that prints macro value pairs. Used to test external config file support.
+def print_pair_list(macroValuePairs):
+    for pair in macroValuePairs:
+        print("A value of '{}' will be assigned to the '{}' macro.\n".format(pair[1][:-1], pair[0]))
 
 
 
@@ -196,7 +203,17 @@ def check_required(macro):
             return True
     return False
 
-
+def add_req_pairs(reqPairs):
+    reqPairsFilled = []
+    for pair in macroValList:
+        isExternal = False
+        for externPair in reqPairs:
+            if externPair[0] == pair[0]:
+                reqPairsFilled.append(externPair)
+                isExternal = True
+        if not isExternal:
+            reqPairsFilled.append(pair)
+    return reqPairsFilled
 
 # Function that generates macro value pairs from an external file.
 # Takes path to file as input, reads line by line breaking apart macros and values
@@ -209,16 +226,18 @@ def generate_pairs_extern(path_to_extern):
     line = externFile.readline()
 
     while line:
-        if line[0] != '#' and not line.strip():
-            macro, val = line.split('=')
-            pair = [macro, val]
-            req = check_required(macro)
+        if line[0] != '#' and "=" in line:
+            print("{}".format(line))
+            pair = line.split('=')
+            req = check_required(pair[0])
             if req:
-                reqPairs.append(req)
+                reqPairs.append(pair)
             else:
-                optPairs.append(req)
+                optPairs.append(pair)
+        line = externFile.readline()
+    reqPairsFilled = add_req_pairs(reqPairs)
     externFile.close()
-    return reqPairs, optPairs
+    return reqPairsFilled, optPairs
 
 
 
@@ -261,6 +280,12 @@ def parse_user_input():
     parser.add_argument('-e', '--ext', help = 'Use an eternal macro list')
     arguments = vars(parser.parse_args())
     if arguments["ext"] is not None:
+#        reqPairs, optPairs = generate_pairs_extern(arguments["ext"])
+#        print("The collected macro-value pairs are:\n")
+#        print("REQUIRED:\n")
+#        print_pair_list(reqPairs)
+#        print("OPTIONAL:\n")
+#        print_pair_list(optPairs)
         generate_config_files(True, arguments["ext"], arguments["rem"], arguments["opt"])
     else:
         generate_config_files(False, None, arguments["rem"], arguments["opt"])
