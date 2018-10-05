@@ -252,10 +252,10 @@ def generate_config_files(use_external, path_to_extern, remove_other_arch, repla
     
     if use_external == True:
         reqPairs, optPairs = generate_pairs_extern(path_to_extern)
-        process_examples(reqPairs, optPairs)
+        process_examples(reqPairs, optPairs, replace_opt_macros)
     
     else:
-        process_examples(macroValList, optionalValList)
+        process_examples(macroValList, optionalValList, replace_opt_macros)
 
 
 
