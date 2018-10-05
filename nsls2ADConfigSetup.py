@@ -109,10 +109,14 @@ optionalValList = [boostPair, incPVAPair, qsrvPair, incBloscPair, extBloscPair, 
                     incTIFPair, extTIFPair, extXML2Pair, incZlibPair, extZlibPair]
 #######################################################################################################################################################
 
+
+
+# Function that removes all whitespace in a string
 def remove_whitespace(line):
     line.strip()
     no_whitespace = line.replace(" ", "")
     return no_whitespace
+
 
 
 # Function that prints macro value pairs. Used to test external config file support.
@@ -203,10 +207,16 @@ def process_examples(recPairs, optPairs, replaceOpt):
 # @return: True if macro is required False otherwise
 def check_required(macro):
     for pair in macroValList:
-        if macro == pair[0]:
+        if macro == pair[0]:first make a directory to house all of the example files so they don't clutter up the workspace
             return True
     return False
 
+
+
+# Function that adds required pairs that were not found in an external file and fills them with default values.
+#
+# @params: reqPairs -> required pair list taken from the external setup file
+# @return: reqPairsFilled -> list of pairs from file + all missing required pairs.
 def add_req_pairs(reqPairs):
     reqPairsFilled = []
     for pair in macroValList:
@@ -216,12 +226,20 @@ def add_req_pairs(reqPairs):
                 reqPairsFilled.append(externPair)
                 isExternal = True
         if not isExternal:
+            print("{} macro not found in external setup file. Assigning default value: {} to {}.".format(pair[0],pair[1],pair[0]))
             reqPairsFilled.append(pair)
     return reqPairsFilled
 
+
+
 # Function that generates macro value pairs from an external file.
 # Takes path to file as input, reads line by line breaking apart macros and values
-# Checks 
+# Checks if the macro is required or not, and if only required macros are being replaced,
+# takes that into account.
+#
+# @params: path_to_extern -> path to external setup file.
+# @return: reqPairsFilled -> list of macro/value pairs taken from the file + all remaining required pairs with default values
+# @return: optPairs -> optional macro/value pairs taken from the external setup file
 def generate_pairs_extern(path_to_extern):
     reqPairs = []
     optPairs = []
@@ -246,8 +264,18 @@ def generate_pairs_extern(path_to_extern):
 
 
 # Top Level function of the configuration generator
+# First makes a directory to house all of the example files so they don't clutter up the workspace
+# Then if specified, removes all 'EXAMPLE' files not used for the current architecture.
+# Next calls the process examples function either with the built in macro/value pairs, or with an
+# external setup file. Such a setup file can also be automatically generated using this script with the -g flag.
+#
+# @params: use_external -> flag to use external setup file set by '-o'
+# @params: path_to_extern -> path to external setup file, or None if using built in macro/val pairs
+# @params: remove_other_arch -> flag that decides if 'EXAMPLE' files of other arches are removed. Set by '-r'
+# @params: replace_opt_macros -> flag that decides if optional macros are also replaced. Set by '-o'
+# @return: void
+#
 def generate_config_files(use_external, path_to_extern, remove_other_arch, replace_opt_macros):
-    # first make a directory to house all of the example files so they don't clutter up the workspace
     if not os.path.exists("EXAMPLE_FILES"):
         os.makedirs("EXAMPLE_FILES")
 
@@ -261,6 +289,14 @@ def generate_config_files(use_external, path_to_extern, remove_other_arch, repla
     else:
         process_examples(macroValList, optionalValList, replace_opt_macros)
 
+
+
+# Function that checks a detected macro line against a list of discovered lines
+#
+# @params: macroLines -> list of discovered lines containing macros/values
+# @params: line -> current line being tested
+# @return -> true if the line was accounted for false otherwise
+#
 def counted_check(macroLines, line):
     noWhitespace = remove_whitespace(line)
     macro = line.split('=')[0]
@@ -270,6 +306,13 @@ def counted_check(macroLines, line):
     return False
 
 
+
+# Function that finds a list of all of the macros in a given file, with the caveat that duplicates are removed
+#
+# @params: filePath -> path to file in which search is done.
+# @params: countedMacros -> list of macros already discovered.
+# @return: macroLines -> list of all of the discovered macro lines
+#
 def find_macros(filePath, countedMacros):
     file = open(filePath, "r+")
     macroLines = []
@@ -284,6 +327,12 @@ def find_macros(filePath, countedMacros):
 
 
 # Core function used to generate setup file from existing files
+# First, open a new file, then read all of the current files  searching for non-commented macros
+# then write these lines with whitespace removed to the new setup file
+#
+# @params: includeOptional -> decides whether all macros are added, or just required ones. (Set with -o default is false)
+# @return: void
+#
 def generate_setup_file(includeOptional):
     setupFile = open("AD_SETUP_MACROS", "w+")
     setupFile.write("# Autogenerated setup file for Area Detector for use with configuration script.\n")
@@ -296,12 +345,13 @@ def generate_setup_file(includeOptional):
     for line in macroLines:
         if not includeOptional:
             req = check_required(line.split('=')[0])
-            #print(req)
             if req:
                 setupFile.write(line)
         else:
             setupFile.write(line)
     setupFile.close()
+
+
 
 # Function responsible for parsing the user's command line arguments.
 # 
@@ -311,6 +361,7 @@ def generate_setup_file(includeOptional):
 #
 # optional arguments:
 #  -h, --help         show this help message and exit
+#  -g, --generate     Generate a macro setup file for future use.
 #  -o, --opt          Substitute optional package macros
 #  -r, --rem          Remove example files for other arches
 #  -e EXT, --ext EXT  Use an eternal macro list
@@ -320,7 +371,6 @@ def generate_setup_file(includeOptional):
 def parse_user_input():
     parser = argparse.ArgumentParser(description = 'Setup area detector configuration files')
     parser.add_argument('-g', '--generate', action = 'store_true', help = 'Add this flag to use current config files to generate a macro setup file for future use.')
-    parser.add_argument('-a', '--all', action = 'store_true')
     parser.add_argument('-o', '--opt', action = 'store_true', help = 'Substitute optional package macros (configuring), include opt macros in generated setup file (generating).')
     parser.add_argument('-r', '--rem', action = 'store_true', help = 'Remove example files for other arches')
     parser.add_argument('-e', '--ext', help = 'Use an eternal macro list')
@@ -330,12 +380,6 @@ def parse_user_input():
         print("Setup file has been generated and is named 'AD_SETUP_MACROS.")
     else:
         if arguments["ext"] is not None:
-#            reqPairs, optPairs = generate_pairs_extern(arguments["ext"])
-#            print("The collected macro-value pairs are:\n")
-#            print("REQUIRED:\n")
-#            print_pair_list(reqPairs)
-#            print("OPTIONAL:\n")
-#            print_pair_list(optPairs)
             generate_config_files(True, arguments["ext"], arguments["rem"], arguments["opt"])
         else:
             generate_config_files(False, None, arguments["rem"], arguments["opt"])
