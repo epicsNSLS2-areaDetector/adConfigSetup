@@ -22,7 +22,7 @@ EPICS_ARCH = "linux-x86_64"
 #####################################################################################################################################################
 # Macro/Value pairs. To add new macros and values, add them here, and add the name to the list. Follow the same format as below
 # Check the paths in each pair against your file system and change as necessary
-epicsBasePair       = ["EPICS_BASE",                        "/epics/base-7.0.1.1"]
+epicsBasePair       = ["EPICS_BASE",                        "/epics/base-7.0.1"]
 supportPair         = ["SUPPORT",                           "/epics/synAppsRelease/synApps/support"]
 adPair              = ["AREA_DETECTOR",                     "$(SUPPORT)/areaDetector-3-3-2"]
 adSupportPair       = ["ADSupport",                         "$(AREA_DETECTOR)/ADSupport"]

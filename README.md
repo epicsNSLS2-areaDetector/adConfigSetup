@@ -62,6 +62,18 @@ python3 nsls2ADConfigSetup -o
 python3 nsls2ADConfigSetup -r -e EXTERNAL_FILE
 ```
 
+### Using the autoSetupAD.sh script:
+
+The autoSetupAD.sh script allows for using the base functionality of the script and building area detector in one script call. To use the script, call it followed by the names of the drivers you wish to build. For example:
+```
+bash autoSetupAD.sh ADSpinnaker ADUVC ADProsilica.
+```
+The script will run the config setup with the default parameters, and
+will remove non-pertinent example files from different architectures. After the configure directory is set up, the script will build ADSupport, then ADCore, and then whichever drivers or plugins were selected.
+
+NOTES: 
+* The names passed to the script must match the names of the directories the driver code is stored in.
+* The script runs the python file in default mode, meaning that it is required to edit the python file itself to change the macros. (This may change in the future)
 
 ### Some future additions may include:
 
