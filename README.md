@@ -2,7 +2,7 @@
 
 This is a script that allows for rapid configuration of the Area Detector build process.
 
-Previously, this required copying and editing several files. THe script allows the user
+Previously, this required copying and editing several files. The script allows the user
 to specify which macros should be replaced by which values (usually paths), simplifying
 pre-compilation configuration. 
 
