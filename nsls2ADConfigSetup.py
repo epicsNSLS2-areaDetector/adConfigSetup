@@ -20,8 +20,8 @@ EPICS_ARCH = "linux-x86_64"
 
 # MACROS FOR REQUIRED PACKAGES
 #####################################################################################################################################################
-# Macro/Value pairs. To add new macros and values, add them here, and add the name to the list. Follow the same format as below
-# Check the paths in each pair against your file system and change as necessary
+# Required Macro/Value pairs. You may add custom macro/value pairs here, if you would like them to be replaced on every run of the script.
+# When using an external file and one of these pairs is missing from the file, the default value listed here is used.
 epicsBasePair       = ["EPICS_BASE",                        "/epics/base-7.0.1"]
 supportPair         = ["SUPPORT",                           "/epics/synAppsRelease/synApps/support"]
 adPair              = ["AREA_DETECTOR",                     "$(SUPPORT)/areaDetector-3-3-2"]
@@ -47,7 +47,8 @@ macroValList = [epicsBasePair, supportPair, adPair, adSupportPair, busyPair, asy
 
 # MACROS FOR OPTIONAL PACKAGES (All of these values are set to defaults here to start)
 #######################################################################################################################################################
-# These macro/value pairs follow the same format as the required ones. To enable replacement set the replaceOptionalPackages toggle to 'True'
+# These macro/value pairs follow the same format as the required ones. To enable replacement of optional macros run the script with the -o flag
+# You can also add macro value pairs that you wish to be optional here.
 #
 # NOTE: If the external tag is set to 'YES' and the with tag is set to 'YES', you must enter the generated CONFIG_SITE.local file and add paths to
 #       the include and library paths of the external packages.
@@ -103,7 +104,7 @@ incZlibPair         = ["WITH_ZLIB",                         "YES"]
 extZlibPair         = ["ZLIB_EXTERNAL",                     "NO"]
 
 
-# List containing all optional macro/value pairs
+# List containing all optional macro/value pairs. When adding a new pair, make sure to add it to this list.
 optionalValList = [boostPair, incPVAPair, qsrvPair, incBloscPair, extBloscPair, incGFXMagPair, extGFXMagPair, prefixGFXMagPair, incHDF5Pair, extHDF5Pair,
                     incJPGPair, extJPGPair, incNCDFPair, extNCDFPair, incNEXPair, extNEXPair, incOpenCVPair, extOpenCVPair, incSzipPair, extSzipPair,
                     incTIFPair, extTIFPair, extXML2Pair, incZlibPair, extZlibPair]
@@ -112,6 +113,7 @@ optionalValList = [boostPair, incPVAPair, qsrvPair, incBloscPair, extBloscPair, 
 
 
 # Function that removes all whitespace in a string
+# Used to split a macro/value pair on the '=' symbol.
 def remove_whitespace(line):
     line.strip()
     no_whitespace = line.replace(" ", "")
@@ -146,16 +148,19 @@ def copy_macro_replace(oldPath, reqPairs, optPairs, replaceOpt):
     # Iterate over the lines in the old file, replacing macros as you go
     line = oldFile.readline()
     while line:
+        # check if the line contains a macro
         wasMacro = False
         for pair in reqPairs:
             if line.startswith(pair[0]):
                 newFile.write("{}={}\n".format(pair[0],pair[1]))
                 wasMacro = True
+        # If it wasn't a required macro, check if it was an optional macro (if -o flag was used)
         if wasMacro == False and replaceOpt == True:
             for pair in optPairs:
                 if line.startswith(pair[0]):
                     newFile.write("{}={}\n".format(pair[0],pair[1]))
                     wasMacro = True
+        # Otherwise just write line as-is
         if wasMacro == False:
             newFile.write(line)
         line = oldFile.readline()
@@ -170,6 +175,7 @@ def copy_macro_replace(oldPath, reqPairs, optPairs, replaceOpt):
 # This cleans up the configuration directory, and only leaves necessary files.
 #
 # If building for multilple architectures, do not use the -r flag enabling this.
+# In the future, a toggle between arches will be looked at.
 #
 # @return: void
 #
@@ -205,6 +211,7 @@ def process_examples(recPairs, optPairs, replaceOpt):
 #
 # @params: macro -> macro that is being substituted
 # @return: True if macro is required False otherwise
+#
 def check_required(macro):
     for pair in macroValList:
         if macro == pair[0]:
@@ -217,6 +224,7 @@ def check_required(macro):
 #
 # @params: reqPairs -> required pair list taken from the external setup file
 # @return: reqPairsFilled -> list of pairs from file + all missing required pairs.
+#
 def add_req_pairs(reqPairs):
     reqPairsFilled = []
     for pair in macroValList:
@@ -249,8 +257,9 @@ def generate_pairs_extern(path_to_extern):
 
     while line:
         if line[0] != '#' and "=" in line:
-            print("{}".format(line))
-            pair = line.split('=')
+            # print("{}".format(line))
+            lineNoWhitespace = remove_whitespace(line)
+            pair = lineNoWhitespace.split('=')
             req = check_required(pair[0])
             if req:
                 reqPairs.append(pair)
@@ -269,7 +278,7 @@ def generate_pairs_extern(path_to_extern):
 # Next calls the process examples function either with the built in macro/value pairs, or with an
 # external setup file. Such a setup file can also be automatically generated using this script with the -g flag.
 #
-# @params: use_external -> flag to use external setup file set by '-o'
+# @params: use_external -> flag to use external setup file set by '-e'
 # @params: path_to_extern -> path to external setup file, or None if using built in macro/val pairs
 # @params: remove_other_arch -> flag that decides if 'EXAMPLE' files of other arches are removed. Set by '-r'
 # @params: replace_opt_macros -> flag that decides if optional macros are also replaced. Set by '-o'
@@ -299,7 +308,7 @@ def generate_config_files(use_external, path_to_extern, remove_other_arch, repla
 #
 def counted_check(macroLines, line):
     noWhitespace = remove_whitespace(line)
-    macro = line.split('=')[0]
+    macro = noWhitespace.split('=')[0]
     for l in macroLines:
         if l.split('=')[0] == macro:
             return True
