@@ -22,25 +22,25 @@ EPICS_ARCH = "linux-x86_64"
 #####################################################################################################################################################
 # Required Macro/Value pairs. You may add custom macro/value pairs here, if you would like them to be replaced on every run of the script.
 # When using an external file and one of these pairs is missing from the file, the default value listed here is used.
-epicsBasePair       = ["EPICS_BASE",                        "/epics/base-7.0.1.1"]
-supportPair         = ["SUPPORT",                           "/epics/synAppsRelease/synApps/support"]
-adPair              = ["AREA_DETECTOR",                     "$(SUPPORT)/areaDetector-3-3-2"]
-adSupportPair       = ["ADSupport",                         "$(AREA_DETECTOR)/ADSupport"]
-busyPair            = ["BUSY",                              "$(SUPPORT)/busy"]
-asynPair            = ["ASYN",                              "$(SUPPORT)/asyn"]
-seqPair             = ["SNCSEQ",                            "$(SUPPORT)/seq-2-2-5"]
-sscanPair           = ["SSCAN",                             "$(SUPPORT)/sscan"]
-alivePair           = ["ALIVE",                             "$(SUPPORT)/alive"]
-autosavePair        = ["AUTOSAVE",                          "$(SUPPORT)/autosave"]
-calcPair            = ["CALC",                              "$(SUPPORT)/calc"]
-adCorePair          = ["ADCORE",                            "$(AREA_DETECTOR)/ADCore"]
-iocStatsPair        = ["DEVIOCSTATS",                       "$(SUPPORT)/iocStats"]
-pvaPair             = ["PVA",                               "path to pva"]
+epicsBase_pair       = ["EPICS_BASE",                        "/epics/base-7.0.1.1"]
+support_pair         = ["SUPPORT",                           "/epics/synAppsRelease/synApps/support"]
+ad_pair              = ["AREA_DETECTOR",                     "$(SUPPORT)/areaDetector-3-3-2"]
+adSupport_pair       = ["ADSupport",                         "$(AREA_DETECTOR)/ADSupport"]
+busy_pair            = ["BUSY",                              "$(SUPPORT)/busy"]
+asyn_pair            = ["ASYN",                              "$(SUPPORT)/asyn"]
+seq_pair             = ["SNCSEQ",                            "$(SUPPORT)/seq-2-2-5"]
+sscan_pair           = ["SSCAN",                             "$(SUPPORT)/sscan"]
+alive_pair           = ["ALIVE",                             "$(SUPPORT)/alive"]
+autosave_pair        = ["AUTOSAVE",                          "$(SUPPORT)/autosave"]
+calc_pair            = ["CALC",                              "$(SUPPORT)/calc"]
+adCore_pair          = ["ADCORE",                            "$(AREA_DETECTOR)/ADCore"]
+iocStats_pair        = ["DEVIOCSTATS",                       "$(SUPPORT)/iocStats"]
+pva_pair             = ["PVA",                               "path to pva"]
 
 # List containing macros and values to replace. List looks as follows: [ ["EPICS_BASE", pathToBase], ["SUPPORT", pathToSupport], ...]
-macroValList = [epicsBasePair, supportPair, adPair, adSupportPair, busyPair, asynPair, seqPair, 
-                sscanPair, alivePair, autosavePair, calcPair, adCorePair,  
-                iocStatsPair, pvaPair]
+required_macro_value_list = [epicsBase_pair, support_pair, ad_pair, adSupport_pair, busy_pair, asyn_pair, seq_pair, 
+                sscan_pair, alive_pair, autosave_pair, calc_pair, adCore_pair,  
+                iocStats_pair, pva_pair]
 #######################################################################################################################################################
 
 
@@ -53,67 +53,67 @@ macroValList = [epicsBasePair, supportPair, adPair, adSupportPair, busyPair, asy
 # NOTE: If the external tag is set to 'YES' and the with tag is set to 'YES', you must enter the generated CONFIG_SITE.local file and add paths to
 #       the include and library paths of the external packages.
 
-boostPair           = ["WITH_BOOST",                        "NO"]           # Boost is used for AD unit tests
+boost_pair           = ["WITH_BOOST",                        "NO"]           # Boost is used for AD unit tests
 
-incPVAPair          = ["WITH_PVA",                          "YES"]          # pva must be enabled for NDPluginPva, pvaDriver, and qsrv
+incPVA_pair          = ["WITH_PVA",                          "YES"]          # pva must be enabled for NDPluginPva, pvaDriver, and qsrv
 
-qsrvPair            = ["WITH_QSRV",                         "YES"]          #controls whether IOCs are built with QSRV
+qsrv_pair            = ["WITH_QSRV",                         "YES"]          #controls whether IOCs are built with QSRV
 
 # Blosc is required for specific compressors in the HDF5 plugin
-incBloscPair        = ["WITH_BLOSC",                        "YES"]
-extBloscPair        = ["BLOSC_EXTERNAL",                    "NO"]
+incBlosc_pair        = ["WITH_BLOSC",                        "YES"]
+extBlosc_pair        = ["BLOSC_EXTERNAL",                    "NO"]
 
 # GraphicsMagick is used by NDFileMagick and ADURL
-incGFXMagPair       = ["WITH_GRAPHICSMAGIK",                "YES"]
-extGFXMagPair       = ["GRAPHICSMAGICK_EXTERNAL",           "NO"]
-prefixGFXMagPair    = ["GRAPHICSMAGICK_PREFIX_SYMBOLS",     "YES"]
+incGFXMag_pair       = ["WITH_GRAPHICSMAGIK",                "YES"]
+extGFXMag_pair       = ["GRAPHICSMAGICK_EXTERNAL",           "NO"]
+prefixGFXMag_pair    = ["GRAPHICSMAGICK_PREFIX_SYMBOLS",     "YES"]
 
 # HDF5 is required for HDF5 file processing as well as Nexus
-incHDF5Pair         = ["WITH_HDF5",                         "YES"]
-extHDF5Pair         = ["HDF5_EXTERNAL",                     "NO"]
+incHDF5_pair         = ["WITH_HDF5",                         "YES"]
+extHDF5_pair         = ["HDF5_EXTERNAL",                     "NO"]
 
 # JPEG is required for jpg file processing
-incJPGPair          = ["WITH_JPEG",                         "YES"]
-extJPGPair          = ["JPEG_EXTERNAL",                     "NO"]
+incJPG_pair          = ["WITH_JPEG",                         "YES"]
+extJPG_pair          = ["JPEG_EXTERNAL",                     "NO"]
 
 # NetCDF processing
-incNCDFPair         = ["WITH_NETCDF",                       "YES"]
-extNCDFPair         = ["NETCDF_EXTERNAL",                   "NO"]
+incNCDF_pair         = ["WITH_NETCDF",                       "YES"]
+extNCDF_pair         = ["NETCDF_EXTERNAL",                   "NO"]
 
 # Nexus file processing
-incNEXPair          = ["WITH_NEXUS",                        "YES"]
-extNEXPair          = ["NEXUS_EXTERNAL",                    "NO"]
+incNEX_pair          = ["WITH_NEXUS",                        "YES"]
+extNEX_pair          = ["NEXUS_EXTERNAL",                    "NO"]
 
 # Computer Vision ADCompVision ADPluginBar
-incOpenCVPair       = ["WITH_OPENCV",                       "NO"]
-extOpenCVPair       = ["OPENCV_EXTERNAL",                   "YES"]
+incOpenCV_pair       = ["WITH_OPENCV",                       "NO"]
+extOpenCV_pair       = ["OPENCV_EXTERNAL",                   "YES"]
 
 # Required for HDF5 and Nexus.
-incSzipPair         = ["WITH_SZIP",                         "YES"]
-extSzipPair         = ["SZIP_EXTERNAL",                     "NO"]
+incSzip_pair         = ["WITH_SZIP",                         "YES"]
+extSzip_pair         = ["SZIP_EXTERNAL",                     "NO"]
 
 # Tiff processing
-incTIFPair          = ["WITH_TIFF",                         "YES"]
-extTIFPair          = ["TIFF_EXTERNAL",                     "NO"]
+incTIF_pair          = ["WITH_TIFF",                         "YES"]
+extTIF_pair          = ["TIFF_EXTERNAL",                     "NO"]
 
 # Required by ADCore, but can use external build.
-extXML2Pair         = ["XML2_EXTERNAL",                     "NO"]
+extXML2_pair         = ["XML2_EXTERNAL",                     "NO"]
 
 # Required for HDF5 and Nexus
-incZlibPair         = ["WITH_ZLIB",                         "YES"]
-extZlibPair         = ["ZLIB_EXTERNAL",                     "NO"]
+incZlib_pair         = ["WITH_ZLIB",                         "YES"]
+extZlib_pair         = ["ZLIB_EXTERNAL",                     "NO"]
 
 
 # List containing all optional macro/value pairs. When adding a new pair, make sure to add it to this list.
-optionalValList = [boostPair, incPVAPair, qsrvPair, incBloscPair, extBloscPair, incGFXMagPair, extGFXMagPair, prefixGFXMagPair, incHDF5Pair, extHDF5Pair,
-                    incJPGPair, extJPGPair, incNCDFPair, extNCDFPair, incNEXPair, extNEXPair, incOpenCVPair, extOpenCVPair, incSzipPair, extSzipPair,
-                    incTIFPair, extTIFPair, extXML2Pair, incZlibPair, extZlibPair]
+optional_mcaro_value_pairs = [boost_pair, incPVA_pair, qsrv_pair, incBlosc_pair, extBlosc_pair, incGFXMag_pair, extGFXMag_pair, prefixGFXMag_pair, incHDF5_pair, extHDF5_pair,
+                    incJPG_pair, extJPG_pair, incNCDF_pair, extNCDF_pair, incNEX_pair, extNEX_pair, incOpenCV_pair, extOpenCV_pair, incSzip_pair, extSzip_pair,
+                    incTIF_pair, extTIF_pair, extXML2_pair, incZlib_pair, extZlib_pair]
 #######################################################################################################################################################
 
 
 
 # Function that removes all whitespace in a string
-# Used to split a macro/value pair on the '=' symbol.
+# Used prior to splitting a macro/value pair on the '=' symbol.
 def remove_whitespace(line):
     line.strip()
     no_whitespace = line.replace(" ", "")
@@ -122,8 +122,8 @@ def remove_whitespace(line):
 
 
 # Function that prints macro value pairs. Used to test external config file support.
-def print_pair_list(macroValuePairs):
-    for pair in macroValuePairs:
+def print_pair_list(macro_value_pairs):
+    for pair in macro_value_pairs:
         print("A value of '{}' will be assigned to the '{}' macro.\n".format(pair[1][:-1], pair[0]))
 
 
@@ -133,41 +133,47 @@ def print_pair_list(macroValuePairs):
 # the line is copied as-is. upon completion, the old file is moved into a new "EXAMPLE_FILES"
 # directory if it is needed again.
 #
-# @params: oldPath -> path to the example configuration file
-# @params: recPairs -> pairs of required Macros to edit
-# @params: optPairs -> pairs of optional macros to edit
-# @params: replaceOpt -> flag to see if opt macros are to be replaced
+# @params: old_path                 -> path to the example configuration file
+# @params: required_pairs           -> pairs macros and values that are guaranteed to be replaced
+# @params: optional_pairs           -> pairs macros and values that can optionally be replaced
+# @params: replace_optional_macros  -> flag to see if optional macros will be replaced
+# @params: replace_commented        -> flag that decides if commented macros are to be replaced as well
 # @return: void
 #
-def copy_macro_replace(oldPath, reqPairs, optPairs, replaceOpt):
-    oldFile = open(oldPath, "r+")
+def copy_macro_replace(old_path, required_pairs, optional_pairs, replace_optional_macros, replace_commented):
+    old_file = open(old_path, "r+")
     # Every example file starts with EXAMPLE_FILENAME, so we disregard the first 8 characters 'EXAMPLE_' for the new name
-    newPath = oldPath[8:]
-    newFile = open(newPath, "w+")
+    new_path = old_path[8:]
+    new_file = open(new_path, "w+")
 
     # Iterate over the lines in the old file, replacing macros as you go
-    line = oldFile.readline()
+    line = old_file.readline()
     while line:
         # check if the line contains a macro
-        wasMacro = False
-        for pair in reqPairs:
+        was_macro = False
+        for pair in required_pairs:
+            # check if we want to replace the commented macro
+            if replace_commented and line[0] == '#':
+                line = line[1:]
             if line.startswith(pair[0]):
-                newFile.write("{}={}\n".format(pair[0],pair[1]))
-                wasMacro = True
+                new_file.write("{}={}\n".format(pair[0],pair[1]))
+                was_macro = True
         # If it wasn't a required macro, check if it was an optional macro (if -o flag was used)
-        if wasMacro == False and replaceOpt == True:
-            for pair in optPairs:
+        if was_macro == False and replace_optional_macros == True:
+            for pair in optional_pairs:
+                if replace_commented and line[0] == '#':
+                    line = line[1:]
                 if line.startswith(pair[0]):
-                    newFile.write("{}={}\n".format(pair[0],pair[1]))
-                    wasMacro = True
+                    new_file.write("{}={}\n".format(pair[0],pair[1]))
+                    was_macro = True
         # Otherwise just write line as-is
-        if wasMacro == False:
+        if was_macro == False:
             newFile.write(line)
         line = oldFile.readline()
-    oldFile.close()
+    old_file.close()
     # Place the old file in a directory for future use.
-    shutil.move(oldPath, "EXAMPLE_FILES/{}".format(oldPath))
-    newFile.close()
+    shutil.move(old_path, "EXAMPLE_FILES/{}".format(old_path))
+    new_file.close()
 
 
 
@@ -194,16 +200,17 @@ def remove_examples():
 # Basic function that iterates over all of the files and directories in the "configure" directory
 # of area detector. If it detects "EXAMPLE" files, it passes them on to the macro replacing function
 #
-# @params: recPairs -> recquired macro/value pairs
-# @params: optPairs -> optional macro/value pairs
-# @params: replaceOpt -> flag to see if optional macro/value pairs should be replaced
+# @params: required_pairs           -> recquired macro/value pairs
+# @params: optrional_pairs          -> optional macro/value pairs
+# @params: replace_optional_macros  -> flag to see if optional macro/value pairs should be replaced
+# @params: replace_commented        -> flag that decides if commented macros can also be replaced
 # @return: void
 #
-def process_examples(recPairs, optPairs, replaceOpt):
+def process_examples(required_pairs, optional_pairs, replace_optional_macros, replace_commented):
     for file in os.listdir():
         if os.path.isfile(file):
             if file.startswith("EXAMPLE"):
-                copy_macro_replace(file, recPairs, optPairs, replaceOpt)
+                copy_macro_replace(file, required_pairs, optitonal_pairs, replace_optional_macros, replace_commented)
 
 
 
@@ -213,7 +220,7 @@ def process_examples(recPairs, optPairs, replaceOpt):
 # @return: True if macro is required False otherwise
 #
 def check_required(macro):
-    for pair in macroValList:
+    for pair in required_macro_value_list:
         if macro == pair[0]:
             return True
     return False
@@ -225,18 +232,18 @@ def check_required(macro):
 # @params: reqPairs -> required pair list taken from the external setup file
 # @return: reqPairsFilled -> list of pairs from file + all missing required pairs.
 #
-def add_req_pairs(reqPairs):
-    reqPairsFilled = []
-    for pair in macroValList:
-        isExternal = False
-        for externPair in reqPairs:
-            if externPair[0] == pair[0]:
-                reqPairsFilled.append(externPair)
-                isExternal = True
-        if not isExternal:
+def add_req_pairs(required_pairs):
+    required_pairs_filled = []
+    for pair in required_macro_value_list:
+        is_external = False
+        for external_pair in required_pairs:
+            if external_pair[0] == pair[0]:
+                reqPairsFilled.append(external_pair)
+                is_external = True
+        if not is_external:
             print("{} macro not found in external setup file. Assigning default value: {} to {}.".format(pair[0],pair[1],pair[0]))
-            reqPairsFilled.append(pair)
-    return reqPairsFilled
+            required_pairs_filled.append(pair)
+    return required_pairs_filled
 
 
 
@@ -249,26 +256,29 @@ def add_req_pairs(reqPairs):
 # @return: reqPairsFilled -> list of macro/value pairs taken from the file + all remaining required pairs with default values
 # @return: optPairs -> optional macro/value pairs taken from the external setup file
 def generate_pairs_extern(path_to_extern):
-    reqPairs = []
-    optPairs = []
-    externFile = open(path_to_extern, "r+")
+    required_pairs = []
+    optional_pairs = []
+    external_file = open(path_to_extern, "r+")
 
-    line = externFile.readline()
+    line = external_file.readline()
 
     while line:
         if line[0] != '#' and "=" in line:
             # print("{}".format(line))
-            lineNoWhitespace = remove_whitespace(line)
-            pair = lineNoWhitespace.split('=')
-            req = check_required(pair[0])
-            if req:
-                reqPairs.append(pair)
+            line_no_whitespace = remove_whitespace(line)
+            pair = line_no_whitespace.split('=')
+            if pair[1] == "":
+                print("Bypassing macro {}, no value specified\n".format(pair[0]))
             else:
-                optPairs.append(pair)
-        line = externFile.readline()
-    reqPairsFilled = add_req_pairs(reqPairs)
-    externFile.close()
-    return reqPairsFilled, optPairs
+                req = check_required(pair[0])
+                if req:
+                    required_pairs.append(pair)
+                else:
+                    optional_pairs.append(pair)
+        line = external_file.readline()
+    required_pairs_filled = add_req_pairs(required_pairs)
+    external_file.close()
+    return required_pairs_filled, optional_pairs
 
 
 
@@ -278,13 +288,14 @@ def generate_pairs_extern(path_to_extern):
 # Next calls the process examples function either with the built in macro/value pairs, or with an
 # external setup file. Such a setup file can also be automatically generated using this script with the -g flag.
 #
-# @params: use_external -> flag to use external setup file set by '-e'
-# @params: path_to_extern -> path to external setup file, or None if using built in macro/val pairs
-# @params: remove_other_arch -> flag that decides if 'EXAMPLE' files of other arches are removed. Set by '-r'
-# @params: replace_opt_macros -> flag that decides if optional macros are also replaced. Set by '-o'
+# @params: use_external         -> flag to use external setup file set by '-e'
+# @params: path_to_extern       -> path to external setup file, or None if using built in macro/val pairs
+# @params: remove_other_arch    -> flag that decides if 'EXAMPLE' files of other arches are removed. Set by '-r'
+# @params: replace_opt_macros   -> flag that decides if optional macros are also replaced. Set by '-o'
+# @params: replace_commented    -> flag that decides if commented macros are to be replaced as well
 # @return: void
 #
-def generate_config_files(use_external, path_to_extern, remove_other_arch, replace_opt_macros):
+def generate_config_files(use_external, path_to_extern, remove_other_arch, replace_opt_macros, replace_commented):
     if not os.path.exists("EXAMPLE_FILES"):
         os.makedirs("EXAMPLE_FILES")
 
@@ -292,24 +303,24 @@ def generate_config_files(use_external, path_to_extern, remove_other_arch, repla
         remove_examples()
     
     if use_external == True:
-        reqPairs, optPairs = generate_pairs_extern(path_to_extern)
-        process_examples(reqPairs, optPairs, replace_opt_macros)
+        required_pairs, optional_pairs = generate_pairs_extern(path_to_extern)
+        process_examples(required_pairs, optional_pairs, replace_opt_macros, replace_commented)
     
     else:
-        process_examples(macroValList, optionalValList, replace_opt_macros)
+        process_examples(required_macro_value_list, optional_mcaro_value_pairs, replace_opt_macros, replace_commented)
 
 
 
 # Function that checks a detected macro line against a list of discovered lines
 #
-# @params: macroLines -> list of discovered lines containing macros/values
-# @params: line -> current line being tested
-# @return -> true if the line was accounted for false otherwise
+# @params: macro_lines  -> list of discovered lines containing macros/values
+# @params: line         -> current line being tested
+# @return: true if the line was accounted for false otherwise
 #
-def counted_check(macroLines, line):
-    noWhitespace = remove_whitespace(line)
-    macro = noWhitespace.split('=')[0]
-    for l in macroLines:
+def counted_check(macro_lines, line):
+    line_no_whitespace = remove_whitespace(line)
+    macro = line_no_whitespace.split('=')[0]
+    for l in macro_lines:
         if l.split('=')[0] == macro:
             return True
     return False
@@ -318,20 +329,28 @@ def counted_check(macroLines, line):
 
 # Function that finds a list of all of the macros in a given file, with the caveat that duplicates are removed
 #
-# @params: filePath -> path to file in which search is done.
-# @params: countedMacros -> list of macros already discovered.
-# @return: macroLines -> list of all of the discovered macro lines
+# @params: file_path            -> path to file in which search is done.
+# @params: counted_macros       -> list of macros already discovered.
+# @params: include_commented    -> flag that decides if commented out macros are included
+# @return: macroLines           -> list of all of the discovered macro lines
 #
-def find_macros(filePath, countedMacros):
-    file = open(filePath, "r+")
-    macroLines = []
+def find_macros(file_path, counted_macros, include_commented):
+    file = open(file_path, "r+")
+    macro_lines = []
     line = file.readline()
     while line:
-        if "=" in line and line[0]!='#':
-            if not counted_check(countedMacros, line):
-                macroLines.append(remove_whitespace(line))
+        if include_commented:
+            if "=" in line:
+                if line[0] == '#':
+                    line = line[1:]
+                if not counted_check(counted_macros, line):
+                    macro_lines.append(remove_whitespace(line))
+        else:
+            if "=" in line and line[0]!='#':
+                if not counted_check(counted_macros, line):
+                    macro_lines.append(remove_whitespace(line))
         line = file.readline()
-    return macroLines
+    return macro_lines
 
 
 
@@ -342,23 +361,23 @@ def find_macros(filePath, countedMacros):
 # @params: includeOptional -> decides whether all macros are added, or just required ones. (Set with -o default is false)
 # @return: void
 #
-def generate_setup_file(includeOptional):
-    setupFile = open("AD_SETUP_MACROS", "w+")
-    setupFile.write("# Autogenerated setup file for Area Detector for use with configuration script.\n")
-    setupFile.write("\n")
-    macroLines = []
+def generate_setup_file(include_optional, include_commented):
+    setup_file = open("AD_SETUP_MACROS", "w+")
+    setup_file.write("# Autogenerated setup file for Area Detector for use with configuration script.\n")
+    setup_file.write("\n")
+    macro_lines = []
     for file in os.listdir():
         if os.path.isfile(file) and file != "nsls2ADConfigSetup.py":
-            fileMacros = find_macros(file, macroLines)
-            macroLines = macroLines + fileMacros
-    for line in macroLines:
-        if not includeOptional:
+            file_macros = find_macros(file, macro_lines, include_commented)
+            macro_lines = macro_lines + file_macros
+    for line in macro_lines:
+        if not include_optional:
             req = check_required(line.split('=')[0])
             if req:
-                setupFile.write(line)
+                setup_file.write(line)
         else:
-            setupFile.write(line)
-    setupFile.close()
+            setup_file.write(line)
+    setup_file.close()
 
 
 
@@ -373,25 +392,27 @@ def generate_setup_file(includeOptional):
 #  -g, --generate     Generate a macro setup file for future use.
 #  -o, --opt          Substitute optional package macros
 #  -r, --rem          Remove example files for other arches
+#  -c, --commented    Include commented out macro/value pairs in setup file generation
 #  -e EXT, --ext EXT  Use an eternal macro list
 #
 # After parsing calls the top level generate_config_files function
 #
 def parse_user_input():
     parser = argparse.ArgumentParser(description = 'Setup area detector configuration files')
-    parser.add_argument('-g', '--generate', action = 'store_true', help = 'Add this flag to use current config files to generate a macro setup file for future use.')
-    parser.add_argument('-o', '--opt', action = 'store_true', help = 'Substitute optional package macros (configuring), include opt macros in generated setup file (generating).')
-    parser.add_argument('-r', '--rem', action = 'store_true', help = 'Remove example files for other arches')
+    parser.add_argument('-g', '--generate',     action = 'store_true', help = 'Add this flag to use current config files to generate a macro setup file for future use.')
+    parser.add_argument('-o', '--opt',          action = 'store_true', help = 'Substitute optional package macros (configuring), include opt macros in generated setup file (generating).')
+    parser.add_argument('-r', '--rem',          action = 'store_true', help = 'Remove example files for other arches')
+    parser.add_argument('-c', '--commented',    action = 'store_true', help = 'Replace macros even if they are commented out in the config files')
     parser.add_argument('-e', '--ext', help = 'Use an eternal macro list')
     arguments = vars(parser.parse_args())
     if arguments["generate"] == True:
-        generate_setup_file(arguments["opt"])
+        generate_setup_file(arguments["opt"], arguments["commented"])
         print("Setup file has been generated and is named 'AD_SETUP_MACROS.")
     else:
         if arguments["ext"] is not None:
-            generate_config_files(True, arguments["ext"], arguments["rem"], arguments["opt"])
+            generate_config_files(True, arguments["ext"], arguments["rem"], arguments["opt"], arguments["commented"])
         else:
-            generate_config_files(False, None, arguments["rem"], arguments["opt"])
+            generate_config_files(False, None, arguments["rem"], arguments["opt"], arguments["commented"])
 
 
     

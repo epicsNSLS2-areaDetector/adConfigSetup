@@ -9,6 +9,5 @@ compilation of ADSupport, ADCore, and any AD Driver provided that the driver's d
 
 ### Future improvements:
 
-* Ability to generate and/or replace macros that are initially commented out.
 * Sets of example files for certain driver+plugin combinations
 * Improvements to the autoSetupAD.sh script to automatically install driver dependancies as well.

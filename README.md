@@ -16,13 +16,29 @@ To prepare the script for use, place it into the 'configure' directory in the to
 area detector. Place any external setup files here as well. An example external setup file can
 be found in this repository as well.
 
-## Running the script:
+### Running the script:
 
 The script has two primary functions.
 * Generate an external setup file
 * Apply the external setup file to the area detector configuration
 
 Generating a setup file could be useful if a certain configuration of area detector is desired for use on mutiple machines.
+
+Prior to running the script it is important to set all the macro value pairs you wish to have replaced. This can be done in an external setup file, or within the script itself. Examples of external setup files can be seen in the 'setup_files' directory. If adding macro-value pairs
+to the script, follow the same format as the pairs already included, making sure to specifiy if the macro is to be considered required or not.
+
+### Command line args:
+
+Argument |  Description
+---------|-------------
+-h/--help   |   Displays the help and Usage message
+-r/--rem |   Removes example files from ARCHes unused in compilation
+-o/--opt    |   Replaces optional macros in addition to required ones
+-e/--ext  [EXTERNAL_PATH]  |   Flag for using external setup file for Macros/Values
+-g/--generate   |   Flag to decide if you are generating a config file from the exisiting configuration
+-c/--commented  | Flag to include commented out macros in your file generation
+
+Further details about these command line arguments follow.
 
 ### Help:
 
@@ -46,7 +62,12 @@ and for the second case:
 ```
 python3 nsls2ADConfigSetup.py -g -o
 ```
-Both of these will generate a file called 'AD_SETUP_MACROS'. You may change the macro values directly in the file as well.
+Both of these will generate a file called 'AD_SETUP_MACROS'. You may change the macro values directly in the file as well.    
+In addition, adding the '-c' flag will add macros that are commented out to the setup file. 
+However, this option may also result in certain lines that do not contain macros to be added, so 
+reviewing the resulting file is important. This is because the script identifies a macro as a string
+in the form NAME=VALUE, so a '=' character in any comment will be viewed as part of a macro if this
+flag is set.
 
 ### Applying macros to the configuration files:
 
@@ -55,12 +76,13 @@ When applying macros to the configuration files, you have several options:
 1. The '-r' flag will remove EXAMPLE files of different architectures from the workspace.
 2. The '-o' flag will substitute the optional macros in addition to the required macros
 3. The '-e' flag specifies if an external setup file is to be used.
+4. The '-c' flag will specify whether or not commented out macros are to be replaced as well.
 
 Some example uses of the program are:
 ```
 python3 nsls2ADConfigSetup -r -o -e EXTERNAL_FILE
 
-python3 nsls2ADConfigSetup -o
+python3 nsls2ADConfigSetup -o -c
 
 python3 nsls2ADConfigSetup -r -e EXTERNAL_FILE
 ```
@@ -81,4 +103,3 @@ NOTES:
 ### Some future additions may include:
 
 * Support for other architectures
-* Ability to comment/uncomment macros
