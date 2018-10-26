@@ -1,5 +1,9 @@
 # This is a script that can be used in combination with adConfigSetup
 # to further automate the process of installing area detector.
+#
+# Author: Jakub Wlodek
+# Copyright (c): Brookhaven National Laboratory
+# Created on: October 15, 2018
 
 #first install all of the dependant packages
 

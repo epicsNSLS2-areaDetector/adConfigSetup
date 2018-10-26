@@ -1,5 +1,8 @@
 # AD Configuration Setup
 
+Author: Jakub Wlodek  
+Copyright (c): Brookhaven National Laboratory, 2018
+
 This is a script that allows for rapid configuration of the Area Detector build process.
 
 Previously, this required copying and editing several files. The script allows the user

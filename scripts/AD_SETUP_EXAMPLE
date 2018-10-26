@@ -1,9 +1,17 @@
 # This is an example setup file that you may import into the AD setup python script.
 # Here you can define a set of custom macros to replace in the setup process.
 #
+# Certain rules apply:
+#	1) The script detects macros by searching for the equal sign character, so avoid placing it in comments
+#	2) Currently, only macros uncommented in the configure directory files will be replaced, however, this may change
+#		in the future.
+#
 # Note: Required Macros will be replaced regardless of if they are in this file or not. 
 #       A default value will be substituted if that is the case.
-
+#
+# Author: Jakub Wlodek
+# Copyright (c): Brookhaven National Laboratory
+# Created on: October 1, 2018
 
 # REQUIRED MACRO SUBSTITUTIONS (If these are omitted, a default value will be used)
 
