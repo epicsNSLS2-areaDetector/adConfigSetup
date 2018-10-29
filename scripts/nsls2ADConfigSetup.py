@@ -168,8 +168,8 @@ def copy_macro_replace(old_path, required_pairs, optional_pairs, replace_optiona
                     was_macro = True
         # Otherwise just write line as-is
         if was_macro == False:
-            newFile.write(line)
-        line = oldFile.readline()
+            new_file.write(line)
+        line = old_file.readline()
     old_file.close()
     # Place the old file in a directory for future use.
     shutil.move(old_path, "EXAMPLE_FILES/{}".format(old_path))
@@ -210,7 +210,7 @@ def process_examples(required_pairs, optional_pairs, replace_optional_macros, re
     for file in os.listdir():
         if os.path.isfile(file):
             if file.startswith("EXAMPLE"):
-                copy_macro_replace(file, required_pairs, optitonal_pairs, replace_optional_macros, replace_commented)
+                copy_macro_replace(file, required_pairs, optional_pairs, replace_optional_macros, replace_commented)
 
 
 
@@ -238,7 +238,7 @@ def add_req_pairs(required_pairs):
         is_external = False
         for external_pair in required_pairs:
             if external_pair[0] == pair[0]:
-                reqPairsFilled.append(external_pair)
+                required_pairs_filled.append(external_pair)
                 is_external = True
         if not is_external:
             print("{} macro not found in external setup file. Assigning default value: {} to {}.".format(pair[0],pair[1],pair[0]))
