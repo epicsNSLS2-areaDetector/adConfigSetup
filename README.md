@@ -19,8 +19,8 @@ be found in this repository as well.
 ### Running the script:
 
 The script has two primary functions.
-* Generate an external setup file
-* Apply the external setup file to the area detector configuration
+* Generate an external setup file from the current configuration
+* Replace macro/value pairs in the area detector configuration files by reading from external file, or internal defaults
 
 Generating a setup file could be useful if a certain configuration of area detector is desired for use on mutiple machines.
 
