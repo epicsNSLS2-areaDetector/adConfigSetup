@@ -20,21 +20,23 @@ sudo apt install libxext-dev
 mv nsls2ADConfigSetup.py ../../.
 cd ../..
 python3 nsls2ADConfigSetup.py -r
-
+cd ..
 
 # Then compile ADSupport and AD Core
 
-cd ../ADSupport
+cd ADSupport
 make -sj
+cd ..
 
-cd ../ADCore
+cd ADCore
 make -sj
+cd ..
 
 # Then check the args for which driver to build
 # NOTE: This will not install dependencies for specific drivers
 for var in "$@"
 do
-    cd ../$var
+    cd $var
     if[ $? -eq 0 ]; then
         make -sj
         cd ..
