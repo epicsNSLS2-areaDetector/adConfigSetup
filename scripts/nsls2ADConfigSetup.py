@@ -22,13 +22,13 @@ EPICS_ARCH = "linux-x86_64"
 #####################################################################################################################################################
 # Required Macro/Value pairs. You may add custom macro/value pairs here, if you would like them to be replaced on every run of the script.
 # When using an external file and one of these pairs is missing from the file, the default value listed here is used.
-epicsBase_pair       = ["EPICS_BASE",                        "/epics/base-7.0.1.1"]
-support_pair         = ["SUPPORT",                           "/epics/synAppsRelease/synApps/support"]
-ad_pair              = ["AREA_DETECTOR",                     "$(SUPPORT)/areaDetector-3-3-2"]
+epicsBase_pair       = ["EPICS_BASE",                        "/epics/base"]
+support_pair         = ["SUPPORT",                           "/epics/support"]
+ad_pair              = ["AREA_DETECTOR",                     "$(SUPPORT)/areaDetector"]
 adSupport_pair       = ["ADSupport",                         "$(AREA_DETECTOR)/ADSupport"]
 busy_pair            = ["BUSY",                              "$(SUPPORT)/busy"]
 asyn_pair            = ["ASYN",                              "$(SUPPORT)/asyn"]
-seq_pair             = ["SNCSEQ",                            "$(SUPPORT)/seq-2-2-5"]
+seq_pair             = ["SNCSEQ",                            "$(SUPPORT)/seq"]
 sscan_pair           = ["SSCAN",                             "$(SUPPORT)/sscan"]
 alive_pair           = ["ALIVE",                             "$(SUPPORT)/alive"]
 autosave_pair        = ["AUTOSAVE",                          "$(SUPPORT)/autosave"]

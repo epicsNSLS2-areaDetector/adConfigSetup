@@ -1,5 +1,7 @@
 # AD Configuration Setup
 
+**NOTE: This script has largely been replaced by the installSynApps collection of scripts**
+
 Author: Jakub Wlodek  
 Copyright (c): Brookhaven National Laboratory, 2018
 
